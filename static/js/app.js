@@ -40,9 +40,12 @@ function buildMetadata(sample) {
 
   // Use `d3.json` to fetch the metadata for a sample
   var url="/metadata/"+sample;
+
+  console.log(url);
   // Use d3 to select the panel with id of `#sample-metadata`
-  d3.json("/metadata/"+sample,function(error,response){
-    if(error) console.warn(error);
+  d3.json(url).then(function(response){
+    // if(error) {console.warn(error)};
+    console.log(response);
     var metadata_Sample= d3.select("#sample-metadata");
     // Remove old metadata
     metadata_Sample.selectAll("p").remove();
@@ -95,20 +98,21 @@ function Plotpie(sample){
   // Plotly.d3.json("/otu",function(error,response){
   //     descriptions= response;
   // })
-  d3.json("/samples/" + sample,function(error,response){
-      if(error) console.warn(error);
-
-      var pielabels=[];
-      var pievalues=[];
-      var piedescription=[];
-      for(var i=0;i<10;i++){
-          pielabels.push(response[0].otu_ids[i]);
-          pievalues.push(response[0].sample_values[i]);
-          piedescription.push(response[0].otu_labels[i]);
-          }
-      console.log("pielabels " + pielabels) 
-      console.log("pievalues " + pievalues) 
-      console.log("piedescription " + piedescription)    
+  d3.json("/samples/" + sample).then(function(response){
+    //   if(error) console.warn(error);
+    console.log('Plot Pie Inside');
+    console.log(response);
+      var pielabels=response['otu_ids'].slice(0,11);
+      var pievalues=response['sample_values'].slice(0,11);
+      var piedescription=response['otu_labels'].slice(0,11);
+    //   for(var i=0;i<10;i++){
+    //       pielabels.push(response.otu_ids[i]);
+    //       pievalues.push(response.sample_values[i]);
+    //       piedescription.push(response.otu_labels[i]);
+    //       }
+      console.log("pielabels " + pielabels) ;
+      console.log("pievalues " + pievalues) ;
+      console.log("piedescription " + piedescription)   ; 
       var trace1 = { 
           values: pievalues,
           labels: pielabels,
