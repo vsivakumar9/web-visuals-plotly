@@ -92,6 +92,7 @@ function buildCharts(sample) {
     // otu_ids, and labels (10 each).
 }
 
+//function to build a pie chart based on 10 samples. 
 function Plotpie(sample){
   console.log("starting of plot for Pie Chart");
   var descriptions=[];
@@ -125,14 +126,15 @@ function Plotpie(sample){
       }
       var data=[trace1];
       var layout={
-          height: 450,
-          width: 460,
+          title: "<b>Top 10 Samples: " + sample + "</b>", 
+          height: 470,
+          width: 500,
           margin: {
               l: 10,
               r: 10,
               b: 10,
-              t: 10,
-              pad: 15
+              t: 5,
+              pad: 10
             },
       }
       console.log("ready to plot pie chart")
@@ -140,22 +142,75 @@ function Plotpie(sample){
   })
 }
 
+function Plotscatter(sample){
+  console.log("Plotting Scatter Plot");
+  // var descriptions1=[];
+  // Plotly.d3.json("/otu").then(function(error,response){
+  //     descriptions= response;
+  //})
+      d3.json("/samples/"+sample).then(function(response){
+      //if(error) console.warn(error);
+      console.log("In plotscatter, logging response next")
+      console.log(response)
+      var scatter_description = response['otu_labels'];
+      console.log("logging scatter_description list")
+      console.log(scatter_description.slice(0,10))
+      // var scatter_description=[];
+      // for(var i=0;i<response[0].otu_ids.length;i++){
+      //     scatter_description.push(descriptions[response[0].otu_ids[i]]);
+      // }
+      var trace1 = {
+          x: response['otu_ids'],
+          y: response['sample_values'],
+          marker: {
+              size: response['sample_values'],
+              color: response['otu_ids'].map(d=>100+d*20),
+              colorscale: "Earth"
+          },
+          type:"scatter",
+          mode:"markers",
+          text: scatter_description,
+          hoverinfo: 'x+y+text',
+      };
 
+      var data = [trace1];
+      console.log(data)
+      var layout = {
+          xaxis:{title:"OTU ID",zeroline:true, hoverformat: '.2r'},
+          yaxis:{title: "No: of germs in Sample",zeroline:true, hoverformat: '.2r'},
+          height: 500,
+          width:1200,
+          margin: {
+              l: 100,
+              r: 10,
+              b: 70,
+              t: 10,
+              pad: 5
+            },
+          hovermode: 'closest',
+      };
+      console.log(layout)
+      console.log("starting scatter plot/bubble chart")
+      Plotly.newPlot("bubble",data,layout);
+      
+  })
+}
 
 function optionChanged(newSample) {
   console.log("optionchanged detected and new sample selected")
   console.log("new sample: " + newSample )
   // Fetch new data each time a new sample is selected
-  
   buildMetadata(newSample);
 
-  //buildCharts(newSample);
   // Plot the updated pie chart
   Plotpie(newSample);
+  
+  //Update the scatter plot for the new sample selected.
+  Plotscatter(newSample);
+}
   //Plot the updated gauge chart
   //Plotgauge(newSample);
-  //Plotscatter(newSample);
-}
+  
 
 // Initialize the dashboard
 init();
