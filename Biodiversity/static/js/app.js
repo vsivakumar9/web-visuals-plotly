@@ -24,6 +24,8 @@ function init() {
    for(var i=0;i<response.length;i++){
        dropdown_select.append("option").attr("value",response[i]).text(response[i]);
    }
+   console.log("in /names ", response)
+   console.log(response)
    optionChanged(response[0]);
 
     // Use the first sample from the list to build the initial plots
