@@ -58,6 +58,7 @@ function buildMetadata(sample) {
         }
     }
     console.log("Exiting  buildMetadata   ")
+    buildGauge(response.WFREQ);
 });
 
 }  
@@ -71,29 +72,6 @@ function buildMetadata(sample) {
     // BONUS: Build the Gauge Chart
     // buildGauge(data.WFREQ);
     
-
-function buildCharts(sample) {
-  //  Format the data for Plotly
-  //      layout = {
-  //      height: 600,
-  //      width: 800
-  //  }
-  //  plot_trace = {
-  //      "data": data.otu_ids,
-  //      "values": data.sample_values,
-  //      "labels": data.otu_labels,
-  //      "type": "pie"
-  // # }
-  // #Plotly.plot("pie", data, layout);
-  // @TODO: Use `d3.json` to fetch the sample data for the plots
-
-    // @TODO: Build a Bubble Chart using the sample data
-
-    // @TODO: Build a Pie Chart
-    // HINT: You will need to use slice() to grab the top 10 sample_values,
-    // otu_ids, and labels (10 each).
-}
-
 //function to build a pie chart based on 10 samples. 
 function Plotpie(sample){
   console.log("starting of plot for Pie Chart");
@@ -128,16 +106,17 @@ function Plotpie(sample){
       }
       var data=[trace1];
       var layout={
-          title: "<b>Top 10 Samples: " + sample + "</b>", 
-          height: 470,
-          width: 500,
-          margin: {
-              l: 10,
-              r: 10,
-              b: 10,
-              t: 5,
-              pad: 10
-            },
+          title: "<b>Top 10 Samples: " + sample + "</b>"
+        //   height: 450,
+        //   //height: 400,
+        //   width: 500,
+        //   margin: {
+        //       l: 10,
+        //       r: 10,
+        //       b: 5,
+        //       t: 5,
+        //       pad: 5
+            // },
       }
       console.log("ready to plot pie chart")
       Plotly.newPlot("pie",data,layout);
@@ -174,12 +153,12 @@ function Plotscatter(sample){
           text: scatter_description,
           hoverinfo: 'x+y+text',
       };
-
+      console.log("trace1" + trace1)
       var data = [trace1];
       console.log(data)
       var layout = {
           xaxis:{title:"OTU ID",zeroline:true, hoverformat: '.2r'},
-          yaxis:{title: "No: of germs in Sample",zeroline:true, hoverformat: '.2r'},
+          yaxis:{title: "# of germs in Sample",zeroline:true, hoverformat: '.2r'},
           height: 500,
           width:1200,
           margin: {
